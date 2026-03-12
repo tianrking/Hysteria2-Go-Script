@@ -153,9 +153,11 @@ def get_status_text():
 def generate_qrcode(text):
     """生成二维码"""
     try:
-        result = run_cmd(f"echo '{text}' | qrencode -t ANSIUTF8", capture=True, check=False)
+        # 使用双引号和转义来避免单引号问题
+        escaped_text = text.replace("'", "'\"'\"'")
+        result = run_cmd(f"echo '{escaped_text}' | qrencode -t ANSIUTF8", capture=True, check=False)
         return result
-    except:
+    except Exception:
         return None
 
 def show_loading(msg, delay=0.1):
@@ -399,7 +401,7 @@ def handle_acme_certificate():
     run_cmd(f"{acme_sh} --set-default-ca --server letsencrypt", check=False)
     result = run_cmd(f"{acme_sh} --issue -d {domain} --standalone -k ec-256 --insecure", check=False)
 
-    if "Domain not" in result or "error" in result.lower():
+    if result and ("Domain not" in result or "error" in result.lower()):
         red("证书申请失败，可能原因:")
         yellow("  - 域名未正确解析")
         yellow("  - 80 端口被占用")

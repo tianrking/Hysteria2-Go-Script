@@ -68,14 +68,14 @@ def manage_service(action):
     from ..utils.helpers import run_cmd
 
     if action == "start":
-        run_cmd(f"systemctl start {SERVICE_NAME}")
-        run_cmd(f"systemctl enable {SERVICE_NAME}")
+        run_cmd(f"systemctl start {SERVICE_NAME}", check=False)
+        run_cmd(f"systemctl enable {SERVICE_NAME}", check=False)
         green("已启动")
     elif action == "stop":
-        run_cmd(f"systemctl stop {SERVICE_NAME}")
+        run_cmd(f"systemctl stop {SERVICE_NAME}", check=False)
         green("已停止")
     elif action == "restart":
-        run_cmd(f"systemctl restart {SERVICE_NAME}")
+        run_cmd(f"systemctl restart {SERVICE_NAME}", check=False)
         green("已重启")
     elif action == "status":
         import os

@@ -135,8 +135,10 @@ def generate_qrcode(text):
         二维码ANSI字符串或None
     """
     try:
+        # 使用双引号和转义来避免单引号问题
+        escaped_text = text.replace("'", "'\"'\"'")
         result = run_cmd(
-            f"echo '{text}' | qrencode -t ANSIUTF8",
+            f"echo '{escaped_text}' | qrencode -t ANSIUTF8",
             capture=True, check=False
         )
         return result
